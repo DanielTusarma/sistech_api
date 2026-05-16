@@ -1,0 +1,28 @@
+from fastapi import FastAPI
+# from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(
+    title="API de gestión de empleados en Sistech",
+    description="Backend REST para la gestion de empleados y dependencias en Sistech",
+    version="1.0.0"
+)
+
+
+# # CORS configuration
+# origins = [
+#     "http://localhost:4200", # Angular
+#     "http://localhost:51723", # react - vite
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# endpoint raiz de la app
+@app.get("/")
+def raiz():
+    return {"mensaje": "API Sistech de gestión de empleados funcionando correctamente"}
