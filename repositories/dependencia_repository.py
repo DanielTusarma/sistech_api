@@ -1,0 +1,24 @@
+from sqlalchemy.orm import Session
+from models.dependencia import Dependencia
+
+class DependenciaRepository:
+    # Repositorio para manejar las operaciones relacionadas con la entidad Dependencia
+    def __init__(self, db: Session):
+        self.db = db
+    
+    # Obtener una dependencia por su id
+    def get_dependencia(self, dependencia_id: int) -> Dependencia | None:
+        dependencia = self.db.query(Dependencia).filter(Dependencia.id == dependencia_id).first()
+        return dependencia
+    
+    # Crear una nueva dependencia
+    def create_dependencia(self, nombre: str) -> Dependencia:
+        nueva_dependencia = Dependencia(nombre=nombre)
+        self.db.add(nueva_dependencia)
+        return nueva_dependencia
+    
+    def get_dependencias_all(self) -> Dependencia | None:
+        dependencias = self.db.query(Dependencia).all()
+        return dependencias
+    
+    

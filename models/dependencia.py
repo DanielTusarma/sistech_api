@@ -15,5 +15,6 @@ class Dependencia(Base):
     # instancia de actividad de una dependencia en la empresa
     activo = Column(Boolean, default=True, nullable=False)
     
+    # relacion
     empleados = relationship("Empleado", back_populates="dependencia")
     
