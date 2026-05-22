@@ -162,6 +162,7 @@ En desarrollo.
 
 Próximas mejoras:
 
+* Agregar entidad cargo para empleados.
 * Agregar consultas más complejas.
 * Testing automatizado.
 * Autenticación.

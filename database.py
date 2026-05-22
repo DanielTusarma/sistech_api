@@ -28,7 +28,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # dependencia para fastapi, obtiene una sesion a la BD por peticion
-def det_db():
+def get_db():
     db = SessionLocal()
     try:
         yield db
