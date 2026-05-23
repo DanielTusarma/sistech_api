@@ -18,8 +18,9 @@ class DependenciaRepository:
         self.db.add(nueva_dependencia)
         return nueva_dependencia
     
+    # obtener todas la dependencias
     def get_dependencias_all(self) -> Dependencia | None:
-        dependencias = self.db.query(Dependencia).all()
+        dependencias = self.db.query(Dependencia).order_by(Dependencia.id).all()
         return dependencias
     
     

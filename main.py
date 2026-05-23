@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routers.dependencia_router import router as dependencias_router
+from routers.empleado_router import router as empleados_router
 # from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -29,3 +30,4 @@ def raiz():
     return {"mensaje": "API Sistech de gestión de empleados funcionando correctamente"}
 
 app.include_router(dependencias_router)
+app.include_router(empleados_router)

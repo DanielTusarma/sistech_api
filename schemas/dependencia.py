@@ -24,4 +24,7 @@ class DependenciaRead(BaseModel):
         "from_attributes": True
     }
     
+class DependenciaReadSencilla(BaseModel):
+    nombre: str
+    
     

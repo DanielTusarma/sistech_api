@@ -1,6 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from schemas.dependencia import DependenciaCreate, DependenciaRead
+from schemas.dependencia import DependenciaCreate
 from repositories.dependencia_repository import DependenciaRepository
 
 
@@ -10,7 +10,7 @@ def crear_dependencia(db: Session, datos: DependenciaCreate):
     
     try:
         
-        nueva_dependencia = repository.create_dependencia(datos.nombre)
+        nueva_dependencia = repository.create_dependencia(datos.nombre.title())
         
         db.commit()
         db.refresh(nueva_dependencia)
@@ -20,3 +20,12 @@ def crear_dependencia(db: Session, datos: DependenciaCreate):
     except SQLAlchemyError as e:
         db.rollback()
         raise e
+    
+# servicio para listar todas las dependencias
+def listar_dependencias(db: Session):
+    repository = DependenciaRepository(db)
+    
+    return repository.get_dependencias_all()
+    
+    
+        

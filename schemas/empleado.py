@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, field_validator, EmailStr
 from typing import Optional
 from decimal import Decimal
 from datetime import date
-from .dependencia import DependenciaRead
+from .dependencia import DependenciaRead, DependenciaReadSencilla
 
 class EmpleadoBase(BaseModel):
     nombres: str = Field(..., min_length=2, max_length=50, description="nombres del empleado")
@@ -30,7 +30,7 @@ class EmpleadoUpdate(BaseModel):
     telefono: Optional[str] = Field(None, min_length=7, max_length=15, pattern=r'^\+?\d+$')
     email: Optional[EmailStr] = Field(None, max_length=254)
     salario: Optional[Decimal] = Field(None, max_digits=10, decimal_places=2, gt=0)
-    fecha_ingreso: Optional[date]
+    fecha_ingreso: Optional[date] = None
     dependencia_id: Optional[int] = Field(None, gt=0)
     
     # validacion adicional
@@ -52,6 +52,16 @@ class EmpleadoRead(EmpleadoBase):
     model_config = {
         "from_attributes": True
     }
+    
+class EmpleadoReadSencillo(BaseModel):
+    id: int
+    nombres: str
+    apellidos: str
+    dependencia: DependenciaReadSencilla
+    
+    
+    
+    
     
     
     

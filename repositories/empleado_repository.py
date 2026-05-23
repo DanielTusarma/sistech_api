@@ -21,7 +21,7 @@ class EmpleadoRepository:
     
     # Listar todos los empleados
     def get_empleados_all(self) -> list[Empleado]:
-        empleados = self.db.query(Empleado).all()
+        empleados = self.db.query(Empleado).order_by(Empleado.id).all()
         return empleados
     
     # editar un empleado existente
@@ -43,15 +43,15 @@ class EmpleadoRepository:
     
     # listar empleados activos
     def get_empleados_activos(self) -> list[Empleado]:
-        empleados_activos = self.db.query(Empleado).filter(Empleado.activo==True).all()
+        empleados_activos = self.db.query(Empleado).filter(Empleado.activo==True).order_by(Empleado.id).all()
         return empleados_activos
     
     # listar empleados inactivos
     def get_empleados_inactivos(self) -> list[Empleado]:
-        empleados_inactivos = self.db.query(Empleado).filter(Empleado.activo==False).all()
+        empleados_inactivos = self.db.query(Empleado).filter(Empleado.activo==False).order_by(Empleado.id).all()
         return empleados_inactivos
     
     # listar empleados por dependencia
     def get_empleados_por_dependencia(self, dependencia_id: int) -> list[Empleado]:
-        empleados_dependencia = self.db.query(Empleado).filter(Empleado.dependencia_id==dependencia_id).all()
+        empleados_dependencia = self.db.query(Empleado).filter(Empleado.dependencia_id==dependencia_id).order_by(Empleado.id).all()
         return empleados_dependencia
