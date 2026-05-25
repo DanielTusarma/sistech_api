@@ -2,6 +2,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from schemas.dependencia import DependenciaCreate
 from repositories.dependencia_repository import DependenciaRepository
+from repositories.empleado_repository import EmpleadoRepository
 
 
 # servicio para crear una nueva dependencia
@@ -26,6 +27,13 @@ def listar_dependencias(db: Session):
     repository = DependenciaRepository(db)
     
     return repository.get_dependencias_all()
+
+
+# sercicio para listar los empleados por dependencia
+def listar_empleados_dependencia(db: Session, id_dependencia: int):
+    repository = EmpleadoRepository(db)
+    
+    return repository.get_empleados_por_dependencia(id_dependencia)
     
     
         

@@ -8,7 +8,9 @@ from services.empleado_service import(
     listar_empleados_detalle,
     obtener_empleado_por_id,
     editar_empleado, 
-    desactivar_empleado
+    desactivar_empleado,
+    listar_empleados_activos, 
+    listar_empleados_inactivos
 )
 from schemas.empleado import EmpleadoCreate, EmpleadoRead, EmpleadoUpdate, EmpleadoDesactivar, EmpleadoReadSencillo
 
@@ -24,6 +26,7 @@ def crear_empleado_endpoint(datos: EmpleadoCreate, db: Session = Depends(get_db)
     nuevo_empleado = crear_empleado(db, datos)
     return nuevo_empleado
 
+
 # ruta para listar todos los empleados con todos sus detalles
 @router.get("/", response_model=List[EmpleadoRead])
 def obtener_empleados_detalle_endpoint(db: Session = Depends(get_db)):
@@ -35,6 +38,21 @@ def obtener_empleados_detalle_endpoint(db: Session = Depends(get_db)):
 def obtener_empleados_resumido_endpoint(db: Session = Depends(get_db)):
     empleados_resumidos = listar_empleados_detalle(db)
     return empleados_resumidos
+
+
+# ruta para listar todos los empleados activos
+@router.get("/activos", response_model=List[EmpleadoRead])
+def obtener_empleados_activos_endpoint(db: Session = Depends(get_db)):
+    empleados_activos = listar_empleados_activos(db)
+    return empleados_activos
+
+
+# ruta para listar todos los empleados inactivos
+@router.get("/inactivos", response_model=List[EmpleadoRead])
+def obtener_empleados_inactivos_endpoint(db: Session = Depends(get_db)):
+    empleados_inactivos = listar_empleados_inactivos(db)
+    return empleados_inactivos
+
 
 # ruta para obtener un empleado por su id
 @router.get("/{id}", response_model=EmpleadoRead)
@@ -87,5 +105,7 @@ def desactivar_empleado_endpont(
         )
         
     return empleado_desactivar
+
+
 
 

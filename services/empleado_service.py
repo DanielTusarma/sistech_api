@@ -105,5 +105,23 @@ def desactivar_empleado(db: Session, id: int, datos: EmpleadoDesactivar):
         raise e
     
     
+# servicio para listar todos los empleados activos
+def listar_empleados_activos(db: Session):
+    repository = EmpleadoRepository(db)
     
+    return repository.get_empleados_activos()
+
+
+# servicio para listar todos los empleados activos
+def listar_empleados_inactivos(db: Session):
+    repository = EmpleadoRepository(db)
+    
+    return repository.get_empleados_inactivos()
+
+
+# sercicio para listar los empleados por dependencia
+def listar_empleados_dependencia(db: Session, id_dependencia: int):
+    repository = EmpleadoRepository(db)
+    
+    return repository.get_empleados_por_dependencia(id_dependencia)
     
