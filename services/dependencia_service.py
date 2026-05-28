@@ -23,17 +23,25 @@ def crear_dependencia(db: Session, datos: DependenciaCreate):
         raise e
     
 # servicio para listar todas las dependencias
-def listar_dependencias(db: Session):
+def listar_dependencias(db: Session, page: int = 1, size: int = 5):
     repository = DependenciaRepository(db)
     
-    return repository.get_dependencias_all()
+    skip = (page - 1) * size
+    
+    return repository.get_dependencias_all(skip=skip, limit=size)
 
 
-# sercicio para listar los empleados por dependencia
-def listar_empleados_dependencia(db: Session, id_dependencia: int):
+# servicio para listar los empleados por dependencia
+def listar_empleados_dependencia(db: Session, id_dependencia: int, page: int = 1, size: int = 5):
     repository = EmpleadoRepository(db)
     
-    return repository.get_empleados_por_dependencia(id_dependencia)
+    skip = (page - 1) * size
     
+    return repository.get_empleados_por_dependencia(id_dependencia, skip=skip, limit=size)
     
-        
+
+# servicio para obtener una dependencia por su id
+def obtener_dependencia_por_id(db: Session, id: int):
+    repository = DependenciaRepository(db)
+    
+    return repository.get_dependencia(id)

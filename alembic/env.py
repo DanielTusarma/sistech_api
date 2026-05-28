@@ -11,6 +11,7 @@ import os
 from database import Base
 from models.empleado import Empleado
 from models.dependencia import Dependencia
+from models.cargo import Cargo
 
 load_dotenv()
 

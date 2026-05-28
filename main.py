@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from routers.dependencia_router import router as dependencias_router
 from routers.empleado_router import router as empleados_router
+from routers.cargo_router import router as cargos_router
 # from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -13,7 +14,7 @@ app = FastAPI(
 # # CORS configuration
 # origins = [
 #     "http://localhost:4200", # Angular
-#     "http://localhost:51723", # react - vite
+#     "http://localhost:5173", # react - vite
 # ]
 
 # app.add_middleware(
@@ -31,3 +32,4 @@ def raiz():
 
 app.include_router(dependencias_router)
 app.include_router(empleados_router)
+app.include_router(cargos_router)

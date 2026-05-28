@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from models.dependencia import Dependencia
-from models.empleado import Empleado
 
 class DependenciaRepository:
     # Repositorio para manejar las operaciones relacionadas con la entidad Dependencia
@@ -19,8 +18,8 @@ class DependenciaRepository:
         return nueva_dependencia
     
     # obtener todas la dependencias
-    def get_dependencias_all(self) -> Dependencia | None:
-        dependencias = self.db.query(Dependencia).order_by(Dependencia.id).all()
+    def get_dependencias_all(self, skip: int = 0, limit: int = 5) -> list[Dependencia]:
+        dependencias = self.db.query(Dependencia).order_by(Dependencia.id).offset(skip).limit(limit).all()
         return dependencias
     
     

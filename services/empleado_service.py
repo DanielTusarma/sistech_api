@@ -28,10 +28,12 @@ def crear_empleado(db: Session, datos: EmpleadoCreate):
  
     
 # servicio para listar los empleados
-def listar_empleados_detalle(db: Session):
+def listar_empleados_detalle(db: Session, page: int = 1, size: int = 5):
     repository = EmpleadoRepository(db)
     
-    return repository.get_empleados_all()
+    skip = (page -1) * size
+    
+    return repository.get_empleados_all(skip=skip, limit=size)
 
 
 # servicio para buscar un empleado por su id
@@ -66,6 +68,8 @@ def editar_empleado(db: Session, id: int, datos: EmpleadoUpdate):
             empleado.fecha_ingreso = datos.fecha_ingreso
         if datos.dependencia_id is not None:
             empleado.dependencia_id = datos.dependencia_id
+        if datos.cargo_id is not None:
+            empleado.cargo_id = datos.cargo_id
         
         db.commit()
         db.refresh(empleado)
@@ -106,22 +110,20 @@ def desactivar_empleado(db: Session, id: int, datos: EmpleadoDesactivar):
     
     
 # servicio para listar todos los empleados activos
-def listar_empleados_activos(db: Session):
+def listar_empleados_activos(db: Session, page: int = 1, size: int = 5):
     repository = EmpleadoRepository(db)
     
-    return repository.get_empleados_activos()
+    skip = (page - 1) * size
+    
+    return repository.get_empleados_activos(skip=skip, limit=size)
 
 
-# servicio para listar todos los empleados activos
-def listar_empleados_inactivos(db: Session):
+# servicio para listar todos los empleados inactivos
+def listar_empleados_inactivos(db: Session, page: int = 1, size: int = 5):
     repository = EmpleadoRepository(db)
     
-    return repository.get_empleados_inactivos()
-
-
-# sercicio para listar los empleados por dependencia
-def listar_empleados_dependencia(db: Session, id_dependencia: int):
-    repository = EmpleadoRepository(db)
+    skip = (page - 1) * size
     
-    return repository.get_empleados_por_dependencia(id_dependencia)
+    return repository.get_empleados_inactivos(skip=skip, limit=size)
+
     

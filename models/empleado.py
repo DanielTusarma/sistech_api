@@ -33,11 +33,17 @@ class Empleado(Base):
     # instancia de actividad de un empleado en la empresa
     activo = Column(Boolean, default=True, nullable=False)
     
-    # clave foranea
+    # clave foranea dependencia
     dependencia_id = Column(Integer, ForeignKey("dependencias.id"), nullable=False)
     
-    # Relacion
+    # clave foranea cargo
+    cargo_id = Column(Integer, ForeignKey("cargos.id"), nullable=True)
+    
+    # Relacion dependencia
     dependencia = relationship("Dependencia", back_populates="empleados")
+    
+    # Relacion cargo
+    cargo = relationship("Cargo", back_populates="empleados")
     
     
     

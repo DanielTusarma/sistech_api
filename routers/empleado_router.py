@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -29,28 +29,41 @@ def crear_empleado_endpoint(datos: EmpleadoCreate, db: Session = Depends(get_db)
 
 # ruta para listar todos los empleados con todos sus detalles
 @router.get("/", response_model=List[EmpleadoRead])
-def obtener_empleados_detalle_endpoint(db: Session = Depends(get_db)):
-    empleados = listar_empleados_detalle(db)
+def obtener_empleados_detalle_endpoint(
+    page: int = Query(1, ge=1),
+    size: int = Query(5, ge=1, le=100),    
+    db: Session = Depends(get_db)
+):
+    empleados = listar_empleados_detalle(db=db, page=page, size=size)
     return empleados
 
 # ruta para listar todos los empleados con detalles resumidos
 @router.get("/resumen", response_model=List[EmpleadoReadSencillo])
-def obtener_empleados_resumido_endpoint(db: Session = Depends(get_db)):
-    empleados_resumidos = listar_empleados_detalle(db)
+def obtener_empleados_resumido_endpoint(
+    page: int = Query(1, ge=1),
+    size: int = Query(5, ge=1, le=100),     
+    db: Session = Depends(get_db)):
+    empleados_resumidos = listar_empleados_detalle(db=db, page=page, size=size)
     return empleados_resumidos
 
 
 # ruta para listar todos los empleados activos
 @router.get("/activos", response_model=List[EmpleadoRead])
-def obtener_empleados_activos_endpoint(db: Session = Depends(get_db)):
-    empleados_activos = listar_empleados_activos(db)
+def obtener_empleados_activos_endpoint(
+    page: int = Query(1, ge=1),
+    size: int = Query(5, ge=1, le=100),     
+    db: Session = Depends(get_db)):
+    empleados_activos = listar_empleados_activos(db=db, page=page, size=size)
     return empleados_activos
 
 
 # ruta para listar todos los empleados inactivos
 @router.get("/inactivos", response_model=List[EmpleadoRead])
-def obtener_empleados_inactivos_endpoint(db: Session = Depends(get_db)):
-    empleados_inactivos = listar_empleados_inactivos(db)
+def obtener_empleados_inactivos_endpoint(
+    page: int = Query(1, ge=1),
+    size: int = Query(5, ge=1, le=100),     
+    db: Session = Depends(get_db)):
+    empleados_inactivos = listar_empleados_inactivos(db=db, page=page, size=size)
     return empleados_inactivos
 
 

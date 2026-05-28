@@ -3,6 +3,7 @@ from typing import Optional
 from decimal import Decimal
 from datetime import date
 from .dependencia import DependenciaRead, DependenciaReadSencilla
+from .cargo import CargoRead
 
 class EmpleadoBase(BaseModel):
     nombres: str = Field(..., min_length=2, max_length=50, description="nombres del empleado")
@@ -32,6 +33,7 @@ class EmpleadoUpdate(BaseModel):
     salario: Optional[Decimal] = Field(None, max_digits=10, decimal_places=2, gt=0)
     fecha_ingreso: Optional[date] = None
     dependencia_id: Optional[int] = Field(None, gt=0)
+    cargo_id: Optional[int] = Field(None, gt=0)
     
     # validacion adicional
     @field_validator("nombres", "apellidos")
@@ -47,6 +49,7 @@ class EmpleadoRead(EmpleadoBase):
     id: int
     activo: bool
     dependencia: DependenciaRead
+    cargo: Optional[CargoRead] = None
     fecha_salida: Optional[date] = None
     
     model_config = {
