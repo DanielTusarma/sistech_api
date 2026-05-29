@@ -37,7 +37,7 @@ class Empleado(Base):
     dependencia_id = Column(Integer, ForeignKey("dependencias.id"), nullable=False)
     
     # clave foranea cargo
-    cargo_id = Column(Integer, ForeignKey("cargos.id"), nullable=True)
+    cargo_id = Column(Integer, ForeignKey("cargos.id"), nullable=False)
     
     # Relacion dependencia
     dependencia = relationship("Dependencia", back_populates="empleados")

@@ -32,8 +32,9 @@ def listar_empleados_detalle(db: Session, page: int = 1, size: int = 5):
     repository = EmpleadoRepository(db)
     
     skip = (page -1) * size
+    empleados = repository.get_empleados_all(skip=skip, limit=size)
     
-    return repository.get_empleados_all(skip=skip, limit=size)
+    return empleados
 
 
 # servicio para buscar un empleado por su id

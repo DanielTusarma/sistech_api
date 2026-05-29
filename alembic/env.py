@@ -12,6 +12,7 @@ from database import Base
 from models.empleado import Empleado
 from models.dependencia import Dependencia
 from models.cargo import Cargo
+from models.usuario import Usuario
 
 load_dotenv()
 

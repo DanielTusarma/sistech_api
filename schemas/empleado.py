@@ -49,7 +49,7 @@ class EmpleadoRead(EmpleadoBase):
     id: int
     activo: bool
     dependencia: DependenciaRead
-    cargo: Optional[CargoRead] = None
+    cargo: CargoRead
     fecha_salida: Optional[date] = None
     
     model_config = {
@@ -61,6 +61,10 @@ class EmpleadoReadSencillo(BaseModel):
     nombres: str
     apellidos: str
     dependencia: DependenciaReadSencilla
+    
+    model_config = {
+        "from_attributes": True
+    }
     
     
     

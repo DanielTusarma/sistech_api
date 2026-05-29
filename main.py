@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from routers.dependencia_router import router as dependencias_router
 from routers.empleado_router import router as empleados_router
 from routers.cargo_router import router as cargos_router
+from routers.usuario_router import router as usuario_router
 # from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -33,3 +34,4 @@ def raiz():
 app.include_router(dependencias_router)
 app.include_router(empleados_router)
 app.include_router(cargos_router)
+app.include_router(usuario_router)

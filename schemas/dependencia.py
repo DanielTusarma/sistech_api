@@ -27,4 +27,8 @@ class DependenciaRead(BaseModel):
 class DependenciaReadSencilla(BaseModel):
     nombre: str
     
+    model_config = {
+        "from_attributes": True
+    }
+    
     
