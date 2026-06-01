@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 from schemas.usuario import UsuarioRead, UsuarioCreate
 from repositories.usuario_repository import UsuarioRepository
-from .securiry_service import hash_password
+from auth.security import hash_password
 
 # servicio para crear un usuario
 def crear_usuario(db: Session, datos: UsuarioCreate):

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from typing import List
 from sqlalchemy.orm import Session
+from auth.dependencies import get_current_user
 
 from database import get_db
 from services.empleado_service import(
@@ -30,6 +31,7 @@ def crear_empleado_endpoint(datos: EmpleadoCreate, db: Session = Depends(get_db)
 # ruta para listar todos los empleados con todos sus detalles
 @router.get("/", response_model=List[EmpleadoRead])
 def obtener_empleados_detalle_endpoint(
+    current_user: dict = Depends(get_current_user),
     page: int = Query(1, ge=1),
     size: int = Query(5, ge=1, le=100),    
     db: Session = Depends(get_db)
