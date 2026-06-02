@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from typing import List
 from sqlalchemy.orm import Session
+from auth.permissions import RoleChecker, ADMIN_ONLY, ALL_ROLES, VIEW_EMPLOYEE_ROLES, MANAGEMENT_ROLES
 
 from database import get_db
 from services.cargo_service import(
@@ -11,6 +12,7 @@ from services.cargo_service import(
 )
 from schemas.cargo import CargoCreate, CargoRead
 from schemas.empleado import EmpleadoRead
+from schemas.usuario import UsuarioRead
 
 router = APIRouter(
     prefix="/api/cargos",
@@ -19,7 +21,11 @@ router = APIRouter(
 
 # ruta para crear un cargo
 @router.post("/", response_model=CargoRead, status_code=201)
-def crear_cargo_endpoint(datos: CargoCreate, db: Session = Depends(get_db)):
+def crear_cargo_endpoint(
+    datos: CargoCreate,
+    current_user: UsuarioRead = Depends(RoleChecker(ADMIN_ONLY)),
+    db: Session = Depends(get_db)
+):
     # crear cargo
     nuevo_cargo = crear_cargo(db, datos)
     return nuevo_cargo
@@ -27,6 +33,7 @@ def crear_cargo_endpoint(datos: CargoCreate, db: Session = Depends(get_db)):
 # ruta para listar todos los cargos
 @router.get("/", response_model=List[CargoRead])
 def listar_cargos_endpoint(
+    current_user: UsuarioRead = Depends(RoleChecker(ALL_ROLES)),
     page: int = Query(1, ge=1),
     size: int = Query(5, ge=1, le=100),
     db: Session = Depends(get_db)
@@ -38,6 +45,7 @@ def listar_cargos_endpoint(
 @router.get("/{id}/empleados", response_model=List[EmpleadoRead])
 def listar_empleados_cargo_endpoint(
     id: int = Path(..., gt=0, description="Id del cargo a consultar"),
+    current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),
     page: int = Query(1, ge=1),
     size: int = Query(5, ge=1, le=100),    
     db: Session = Depends(get_db)

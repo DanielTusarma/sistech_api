@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from typing import List
 from sqlalchemy.orm import Session
+from auth.permissions import RoleChecker, ALL_ROLES, ADMIN_ONLY, VIEW_EMPLOYEE_ROLES
 
 from database import get_db
 from services.dependencia_service import(
@@ -11,6 +12,7 @@ from services.dependencia_service import(
 )
 from schemas.dependencia import DependenciaCreate, DependenciaRead
 from schemas.empleado import EmpleadoRead
+from schemas.usuario import UsuarioRead
 
 router = APIRouter(
     prefix="/api/dependencias",
@@ -19,7 +21,11 @@ router = APIRouter(
 
 # ruta para crear una dependencia
 @router.post("/", response_model=DependenciaRead, status_code=201)
-def crear_dependencia_endpoint(datos: DependenciaCreate, db: Session = Depends(get_db)):
+def crear_dependencia_endpoint(
+    datos: DependenciaCreate,
+    current_user: UsuarioRead = Depends(RoleChecker(ADMIN_ONLY)),
+    db: Session = Depends(get_db)
+):
     # crear dependencia
     nueva_dependencia = crear_dependencia(db, datos)
     return nueva_dependencia
@@ -27,6 +33,7 @@ def crear_dependencia_endpoint(datos: DependenciaCreate, db: Session = Depends(g
 # ruta para listar todas las dependencias
 @router.get("/", response_model=List[DependenciaRead])
 def listar_dependencias_endpoint(
+    current_user: UsuarioRead = Depends(RoleChecker(ALL_ROLES)),
     page: int = Query(1, ge=1),
     size: int = Query(5, ge=1, le=100),    
     db: Session = Depends(get_db)):
@@ -36,6 +43,7 @@ def listar_dependencias_endpoint(
 # ruta para listar los empleados por dependencia
 @router.get("/{id}/empleados", response_model=List[EmpleadoRead])
 def listar_empleados_dependencia_endpoint(
+    current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),
     id: int = Path(..., gt=0, description="Id de la dependencia a consultar"),
     page: int = Query(1, ge=1),
     size: int = Query(5, ge=1, le=100),

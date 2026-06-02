@@ -22,6 +22,7 @@ class EmpleadoBase(BaseModel):
     
 class EmpleadoCreate(EmpleadoBase):
     dependencia_id: int = Field(..., gt=0, description="id de la dependencia a la que pertenece el empleado")
+    cargo_id: int = Field(..., gt=0, description="id del cargo que ocupa el empleado")
     
     
 class EmpleadoUpdate(BaseModel):
