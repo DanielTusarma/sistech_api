@@ -6,7 +6,7 @@ from auth.permissions import RoleChecker, ALL_ROLES, VIEW_EMPLOYEE_ROLES, MANAGE
 from database import get_db
 from services.empleado_service import(
     crear_empleado,
-    listar_empleados_detalle,
+    listar_empleados,
     obtener_empleado_por_id,
     editar_empleado, 
     desactivar_empleado,
@@ -15,6 +15,7 @@ from services.empleado_service import(
 )
 from schemas.empleado import EmpleadoCreate, EmpleadoRead, EmpleadoUpdate, EmpleadoDesactivar, EmpleadoReadSencillo
 from schemas.usuario import UsuarioRead
+from schemas.paginacion import PaginatedResponse
 
 router = APIRouter(
     prefix="/api/empleados",
@@ -41,22 +42,22 @@ def obtener_empleados_detalle_endpoint(
     size: int = Query(5, ge=1, le=100),    
     db: Session = Depends(get_db)
 ):
-    empleados = listar_empleados_detalle(db=db, page=page, size=size)
+    empleados = listar_empleados(db=db, page=page, size=size)
     return empleados
 
 # ruta para listar todos los empleados con detalles resumidos
-@router.get("/resumen", response_model=List[EmpleadoReadSencillo])
+@router.get("/resumen", response_model=PaginatedResponse[EmpleadoReadSencillo])
 def obtener_empleados_resumido_endpoint(
     current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),
     page: int = Query(1, ge=1),
     size: int = Query(5, ge=1, le=100),     
     db: Session = Depends(get_db)):
-    empleados_resumidos = listar_empleados_detalle(db=db, page=page, size=size)
+    empleados_resumidos = listar_empleados(db=db, page=page, size=size)
     return empleados_resumidos
 
 
 # ruta para listar todos los empleados activos
-@router.get("/activos", response_model=List[EmpleadoRead])
+@router.get("/activos", response_model=PaginatedResponse[EmpleadoReadSencillo])
 def obtener_empleados_activos_endpoint(
     current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),
     page: int = Query(1, ge=1),
@@ -67,7 +68,7 @@ def obtener_empleados_activos_endpoint(
 
 
 # ruta para listar todos los empleados inactivos
-@router.get("/inactivos", response_model=List[EmpleadoRead])
+@router.get("/inactivos", response_model=PaginatedResponse[EmpleadoReadSencillo])
 def obtener_empleados_inactivos_endpoint(
     current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),
     page: int = Query(1, ge=1),

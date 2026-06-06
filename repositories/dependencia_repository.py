@@ -22,4 +22,8 @@ class DependenciaRepository:
         dependencias = self.db.query(Dependencia).order_by(Dependencia.id).offset(skip).limit(limit).all()
         return dependencias
     
+    # contar las dependencias
+    def count_dependencias(self):
+        return(self.db.query(Dependencia).count())
+    
     

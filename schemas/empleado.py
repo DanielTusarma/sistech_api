@@ -3,7 +3,7 @@ from typing import Optional
 from decimal import Decimal
 from datetime import date
 from .dependencia import DependenciaRead, DependenciaReadSencilla
-from .cargo import CargoRead
+from .cargo import CargoRead, CargoReadSencillo
 
 class EmpleadoBase(BaseModel):
     nombres: str = Field(..., min_length=2, max_length=50, description="nombres del empleado")
@@ -62,6 +62,7 @@ class EmpleadoReadSencillo(BaseModel):
     nombres: str
     apellidos: str
     dependencia: DependenciaReadSencilla
+    cargo: CargoReadSencillo
     
     model_config = {
         "from_attributes": True

@@ -60,3 +60,28 @@ class EmpleadoRepository:
     def get_empleados_por_cargo(self, cargo_id: int, skip: int = 0, limit: int = 5) -> list[Empleado]:
         empleados_cargo = self.db.query(Empleado).filter(Empleado.cargo_id==cargo_id).order_by(Empleado.id).offset(skip).limit(limit).all()
         return empleados_cargo
+    
+    
+    """
+    Funciones para contar empleados segun necesidades varias
+    """
+    
+    # contar los empleados activos
+    def count_empleados_activos(self):
+        return(self.db.query(Empleado).filter(Empleado.activo==True).count())
+        
+    # contar los empleados inactivos
+    def count_empleados_inactivos(self):
+        return(self.db.query(Empleado).filter(Empleado.activo==False).count())
+
+    # contar todos los empleados
+    def count_empleados_all(self):
+        return(self.db.query(Empleado).count())
+    
+    # contar empleados por dependencia
+    def count_empleados_por_dependencia(self, dependencia_id: int):
+        return(self.db.query(Empleado).filter(Empleado.dependencia_id==dependencia_id).count())
+
+    # contar empleados por cargo
+    def count_empleados_por_cargo(self, cargo_id: int):
+        return(self.db.query(Empleado).filter(Empleado.cargo_id==cargo_id).count())

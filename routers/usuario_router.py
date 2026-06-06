@@ -7,6 +7,7 @@ from database import get_db
 from services.usuario_service import crear_usuario, obtener_usuario_por_id, obtener_usuario_por_email, listar_usuarios
 from schemas.usuario import UsuarioCreate, UsuarioRead, UsuarioReadSencillo
 from schemas.usuario import UsuarioRead
+from schemas.paginacion import PaginatedResponse
 
 router = APIRouter(
     prefix="/api/usuarios",
@@ -59,7 +60,7 @@ def obtener_usuario_por_email_endpoint(
 
 
 # ruta para listar todos los usuarios
-@router.get("/", response_model=List[UsuarioReadSencillo])
+@router.get("/", response_model=PaginatedResponse[UsuarioReadSencillo])
 def listar_usuarios_endpoint(
     current_user: UsuarioRead = Depends(RoleChecker(ADMIN_ONLY)),
     page: int = Query(1, ge=1, description="Número de página"),

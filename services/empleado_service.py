@@ -2,7 +2,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from schemas.empleado import EmpleadoCreate, EmpleadoUpdate, EmpleadoDesactivar
 from repositories.empleado_repository import EmpleadoRepository
-
+from core.pagination import construir_paginacion
 
 # servicio para crear un empleado
 def crear_empleado(db: Session, datos: EmpleadoCreate):
@@ -28,13 +28,20 @@ def crear_empleado(db: Session, datos: EmpleadoCreate):
  
     
 # servicio para listar los empleados
-def listar_empleados_detalle(db: Session, page: int = 1, size: int = 5):
+def listar_empleados(db: Session, page: int = 1, size: int = 5):
     repository = EmpleadoRepository(db)
     
     skip = (page -1) * size
     empleados = repository.get_empleados_all(skip=skip, limit=size)
     
-    return empleados
+    total = repository.count_empleados_all()
+    
+    return construir_paginacion(
+        items=empleados,
+        total=total,
+        page=page,
+        size=size
+    )
 
 
 # servicio para buscar un empleado por su id
@@ -116,7 +123,16 @@ def listar_empleados_activos(db: Session, page: int = 1, size: int = 5):
     
     skip = (page - 1) * size
     
-    return repository.get_empleados_activos(skip=skip, limit=size)
+    empleados_activos = repository.get_empleados_activos(skip=skip, limit=size)
+    
+    total = repository.count_empleados_activos()
+    
+    return construir_paginacion(
+        items=empleados_activos,
+        total=total,
+        page=page,
+        size=size
+    )
 
 
 # servicio para listar todos los empleados inactivos
@@ -125,6 +141,16 @@ def listar_empleados_inactivos(db: Session, page: int = 1, size: int = 5):
     
     skip = (page - 1) * size
     
-    return repository.get_empleados_inactivos(skip=skip, limit=size)
+    empleados_inactivos = repository.get_empleados_inactivos(skip=skip, limit=size)
+    
+    total = repository.count_empleados_inactivos()
+    
+    
+    return construir_paginacion(
+        items=empleados_inactivos,
+        total=total,
+        page=page,
+        size=size
+    )
 
     

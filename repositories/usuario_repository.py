@@ -27,3 +27,9 @@ class UsuarioRepository:
     def get_usuarios_all(self, skip: int = 0, limit: int = 5) -> list[Usuario]:
         usuarios = self.db.query(Usuario).order_by(Usuario.id).offset(skip).limit(limit).all()
         return usuarios
+    
+    # contar los usuarios
+    def count_usuarios(self):
+        return(self.db.query(Usuario).count())
+    
+    

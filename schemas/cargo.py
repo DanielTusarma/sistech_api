@@ -25,3 +25,10 @@ class CargoRead(BaseModel):
         "from_attributes": True
     }
     
+class CargoReadSencillo(BaseModel):
+    nombre: str
+    
+    model_config = {
+        "from_attributes": True
+    }
+    

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from schemas.cargo import CargoCreate
 from repositories.cargo_repository import CargoRepository
 from repositories.empleado_repository import EmpleadoRepository
+from core.pagination import construir_paginacion
 
 
 # servicio para crear un nuevo cargo
@@ -32,8 +33,16 @@ def listar_cargos(db: Session, page: int = 1, size: int = 5):
     repository = CargoRepository(db)
     
     skip = (page - 1) * size
+    cargos = repository.get_cargos_all(skip=skip, limit=size)
     
-    return repository.get_cargos_all(skip=skip, limit=size)
+    total = repository.count_cargos()
+    
+    return construir_paginacion(
+        items=cargos,
+        total=total,
+        page=page,
+        size=size
+    )
 
 
 # servicio para listar los empleados por cargo
@@ -41,8 +50,16 @@ def listar_empleados_cargo(db: Session, id_cargo: int, page: int = 1, size: int 
     repository = EmpleadoRepository(db)
     
     skip = (page - 1) * size
+    empleados_cargo = repository.get_empleados_por_cargo(id_cargo, skip=skip, limit=size)
     
-    return repository.get_empleados_por_cargo(id_cargo, skip=skip, limit=size)
+    total = repository.count_empleados_por_cargo(id_cargo)
+    
+    return construir_paginacion(
+        items=empleados_cargo,
+        total=total,
+        page=page,
+        size=size
+    )
 
 # servicio para obtener un cargo por su id
 def obtener_cargo_por_id(db: Session, id: int):

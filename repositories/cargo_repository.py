@@ -22,3 +22,7 @@ class CargoRepository:
     def get_cargos_all(self, skip: int = 0, limit: int = 5) -> list[Cargo]:
         cargos = self.db.query(Cargo).order_by(Cargo.id).offset(skip).limit(limit).all()
         return cargos
+        
+    # contar los cargos
+    def count_cargos(self):
+        return(self.db.query(Cargo).count())

@@ -4,6 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from schemas.usuario import UsuarioRead, UsuarioCreate
 from repositories.usuario_repository import UsuarioRepository
 from auth.security import hash_password
+from core.pagination import construir_paginacion
 
 # servicio para crear un usuario
 def crear_usuario(db: Session, datos: UsuarioCreate):
@@ -59,4 +60,12 @@ def listar_usuarios(db: Session, page: int = 1, size: int = 5):
     repository = UsuarioRepository(db)
     skip = (page - 1) * size
     usuarios = repository.get_usuarios_all(skip=skip, limit=size)
-    return usuarios
+    
+    total = repository.count_usuarios()
+    
+    return construir_paginacion(
+        items=usuarios,
+        total=total,
+        page=page,
+        size=size
+    )

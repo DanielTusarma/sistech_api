@@ -11,8 +11,9 @@ from services.cargo_service import(
     obtener_cargo_por_id
 )
 from schemas.cargo import CargoCreate, CargoRead
-from schemas.empleado import EmpleadoRead
+from schemas.empleado import EmpleadoReadSencillo
 from schemas.usuario import UsuarioRead
+from schemas.paginacion import PaginatedResponse
 
 router = APIRouter(
     prefix="/api/cargos",
@@ -31,7 +32,7 @@ def crear_cargo_endpoint(
     return nuevo_cargo
 
 # ruta para listar todos los cargos
-@router.get("/", response_model=List[CargoRead])
+@router.get("/", response_model=PaginatedResponse[CargoRead])
 def listar_cargos_endpoint(
     current_user: UsuarioRead = Depends(RoleChecker(ALL_ROLES)),
     page: int = Query(1, ge=1),
@@ -42,7 +43,7 @@ def listar_cargos_endpoint(
     return cargos
 
 # ruta para listar los empleados por cargo
-@router.get("/{id}/empleados", response_model=List[EmpleadoRead])
+@router.get("/{id}/empleados", response_model=PaginatedResponse[EmpleadoReadSencillo])
 def listar_empleados_cargo_endpoint(
     id: int = Path(..., gt=0, description="Id del cargo a consultar"),
     current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),

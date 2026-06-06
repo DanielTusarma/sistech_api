@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from schemas.dependencia import DependenciaCreate
 from repositories.dependencia_repository import DependenciaRepository
 from repositories.empleado_repository import EmpleadoRepository
+from core.pagination import construir_paginacion
 
 
 # servicio para crear una nueva dependencia
@@ -27,8 +28,16 @@ def listar_dependencias(db: Session, page: int = 1, size: int = 5):
     repository = DependenciaRepository(db)
     
     skip = (page - 1) * size
+    dependencias = repository.get_dependencias_all(skip=skip, limit=size)
     
-    return repository.get_dependencias_all(skip=skip, limit=size)
+    total = repository.count_dependencias()
+    
+    return construir_paginacion(
+        items=dependencias,
+        total=total,
+        page=page,
+        size=size
+    )
 
 
 # servicio para listar los empleados por dependencia
@@ -36,8 +45,16 @@ def listar_empleados_dependencia(db: Session, id_dependencia: int, page: int = 1
     repository = EmpleadoRepository(db)
     
     skip = (page - 1) * size
+    empleados_dependencia = repository.get_empleados_por_dependencia(id_dependencia, skip=skip, limit=size)
     
-    return repository.get_empleados_por_dependencia(id_dependencia, skip=skip, limit=size)
+    total = repository.count_empleados_por_dependencia(id_dependencia)
+    
+    return construir_paginacion(
+        items=empleados_dependencia,
+        total=total,
+        page=page,
+        size=size
+    )
     
 
 # servicio para obtener una dependencia por su id
