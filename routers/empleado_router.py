@@ -35,7 +35,7 @@ def crear_empleado_endpoint(
 
 
 # ruta para listar todos los empleados con todos sus detalles
-@router.get("/", response_model=List[EmpleadoRead])
+@router.get("/", response_model=PaginatedResponse[EmpleadoRead])
 def obtener_empleados_detalle_endpoint(
     current_user: UsuarioRead = Depends(RoleChecker(VIEW_EMPLOYEE_ROLES)),
     page: int = Query(1, ge=1),

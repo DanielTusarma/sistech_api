@@ -1,19 +1,18 @@
-# API Gestión de empleados Sistech
+# API REST de Gestión empresarial - Sistech
 
-Proyecto backend desarrollado con FastAPI para gestionar los empleados y dependencias de la empresa Sistech.
+Backend desarrollado con Python y FastAPI para la administración de empleados, usuarios, dependencias, cargos y permisos dentro de la empresa Sistech.
+
+La aplicación implementa autenticación JWT, autorización basada en roles (RBAC), persistencia con PostgreSQL y una arquitectura modular orientada a la escalabilidad y mantenibilidad del software.
 
 La aplicación permite:
 
-* Crear dependencias.
-* Listar todas las dependencias.
-* Crear empleados.
-* Listar todos los empleados.
-* Obtener un empleado.
-* Editar un empleado.
-* Desactivar un empleado usando soft delete.
-* Listar todos los empleados activos.
-* Listar todos los empleados inactivos.
-* Listar los empleados por dependencia.
+* Gestión de empleados, usuarios, cargos y dependencias.
+* Autenticación y autorización mediante JWT y RBAC.
+* Soft delete de empleados con registro de fecha de salida.
+* Filtrado y consulta de empleados por cargo, dependencia y estado.
+* Documentación automática con Swagger UI.
+* Migraciones de base de datos con Alembic.
+
 
 ---
 
@@ -26,6 +25,8 @@ La aplicación permite:
 * Alembic
 * Pydantic
 * Uvicorn
+* JWT + RBAC
+* Docker
 
 ---
 
@@ -33,10 +34,12 @@ La aplicación permite:
 
 El proyecto está organizado siguiendo una estructura por capas y patrón Repository:
 
+
 ```plaintext
+Carpeta         Responsabilidad
 routes/         # Rutas y endpoints
 models/         # Modelos SQLAlchemy
-repositories/   # Repositorios para interactuar con la base de datos
+repositories/   # Acceso y persistencia de datos
 schemas/        # Validaciones y serialización con Pydantic
 services/       # Lógica de negocio
 database.py     # Configuración de base de datos
@@ -53,24 +56,28 @@ main.py         # Punto de entrada de FastAPI
 * Listar dependencias.
 * Obtener una dependencia.
 
+## Cargos
+
+* Crear cargo.
+* Listar cargos.
+
+## Usuarios
+
+* Crear usuario.
+* Obtener un usuario por su Id o email.
+
 ## Empleados
 
-* Crear empleado.
-* Listar empleados.
-* Obtener un empleado
-* Editar un empleado.
-* Desactivar un empleado.
-* Obtener empleados activos.
-* Obtener empleados inactivos.
-* Obtener empleados por dependencia.
-
+* Crear, listar, obtener y editar empleado.
+* Desactivar un empleado mediante soft delete.
+* Consultar empleados activos e inactivos.
+* Obtener empleados por dependencia o cargo.
 
 ---
 
 # Regla de negocio
 
-Los empleados no pueden ser eliminados totalmente de la base de datos. En este caso 
-solo se pueden desactivar agregando la fecha de salida de dicho empleado
+Los empleados no se eliminan físicamente de la base de datos. En su lugar, se aplica un soft delete, desactivando el registro y almacenando la fecha de salida.
 
 Si se desactiva un empleado por ejemplo:
 
@@ -126,6 +133,9 @@ Crear un archivo `.env`
 
 ```env
 DATABASE_URL=postgresql+psycopg2://usuario:password@localhost:5432/sistecn_db
+SECRET_KEY=tu_clave_secreta
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
 ---
@@ -146,7 +156,7 @@ uvicorn main:app --reload
 
 ---
 
-# Documentación automática
+# 7 Documentación automática
 
 FastAPI genera documentación automática en:
 
@@ -156,13 +166,20 @@ http://127.0.0.1:8000/docs
 
 ---
 
+# Capturas de pantalla
+
+## Documentación Swagger
+![Swagger](docs/images/Swagger.png)
+
+## Consulta de empleados
+![Empleados](docs/images/empleados1.png)
+![Empleados](docs/images/empleados2.png)
+
 # Estado del proyecto
 
-En desarrollo.
+En desarrollo activo.
 
 Próximas mejoras:
 
-
-* Autenticación.
-* Testing automatizado.
-* Dockerización.
+* Testing automatizado con Pytest.
+* Docker Compose para entorno completo.
